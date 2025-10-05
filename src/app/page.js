@@ -1,255 +1,385 @@
 "use client";
-import Image from "next/image";
 import { useState, useEffect } from "react";
 
 export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrollY, setScrollY] = useState(0);
+  const [activeSection, setActiveSection] = useState("home");
 
   useEffect(() => {
-    const handleScroll = () => setScrollY(window.scrollY);
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+      
+      const sections = ["home", "about", "projects", "skills"];
+      for (const section of sections) {
+        const element = document.getElementById(section);
+        if (element) {
+          const rect = element.getBoundingClientRect();
+          if (rect.top <= 150 && rect.bottom >= 150) {
+            setActiveSection(section);
+            break;
+          }
+        }
+      }
+    };
+    
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const projects = [
+    {
+      title: "Personal Blog Website",
+      description: "Created a responsive blog using React and Tailwind CSS with dark mode support and smooth animations.",
+      tags: ["React", "Tailwind CSS", "JavaScript"],
+      gradient: "from-blue-400 to-cyan-400",
+      icon: "📝"
+    },
+    {
+      title: "Todo App",
+      description: "Built a task management app with local storage, drag-and-drop functionality, and filter options.",
+      tags: ["HTML", "CSS", "JavaScript"],
+      gradient: "from-emerald-400 to-green-400",
+      icon: "✅"
+    },
+    {
+      title: "Weather App",
+      description: "Developed a weather application using OpenWeather API with current weather and 5-day forecast display.",
+      tags: ["React", "API", "CSS3"],
+      gradient: "from-orange-400 to-yellow-400",
+      icon: "🌤️"
+    },
+    {
+      title: "Portfolio Website",
+      description: "Designed and developed my personal portfolio with modern UI/UX and interactive animations.",
+      tags: ["Next.js", "Tailwind", "Framer Motion"],
+      gradient: "from-pink-400 to-rose-400",
+      icon: "🎨"
+    }
+  ];
+
+  const skills = [
+    { 
+      category: "Frontend", 
+      icon: "💻",
+      items: ["HTML", "CSS", "JavaScript", "React", "Tailwind CSS"] 
+    },
+    { 
+      category: "Backend Basics", 
+      icon: "🔧",
+      items: ["Node.js", "Express", "MongoDB", "REST APIs"] 
+    },
+    { 
+      category: "Tools", 
+      icon: "🛠️",
+      items: ["Git", "GitHub", "VS Code", "Figma", "Postman"] 
+    },
+    { 
+      category: "Currently Learning", 
+      icon: "📚",
+      items: ["TypeScript", "Next.js", "PostgreSQL", "Docker"] 
+    }
+  ];
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
-      {/* Animated Navigation Bar */}
-      <nav
-        className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-          scrollY > 50 ? "bg-black/80 backdrop-blur-lg" : "bg-transparent"
-        }`}
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
-            {/* Logo */}
-            <div className="text-2xl font-bold text-white animate-pulse">
-              Portfolio
-            </div>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-cyan-50 to-teal-50">
+      {/* Decorative Elements */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-20 right-20 w-64 h-64 bg-blue-200 rounded-full opacity-30"></div>
+        <div className="absolute bottom-20 left-20 w-80 h-80 bg-cyan-200 rounded-full opacity-30"></div>
+        <div className="absolute top-1/2 left-1/3 w-72 h-72 bg-teal-200 rounded-full opacity-20"></div>
+      </div>
 
-            {/* Desktop Menu */}
-            <div className="hidden md:flex space-x-8">
-              {["Home", "About", "Projects", "Skills", "Contact"].map(
-                (item, index) => (
-                  <a
-                    key={item}
-                    href={`#${item.toLowerCase()}`}
-                    className="text-white hover:text-purple-400 transition-colors duration-300 relative group"
-                    style={{
-                      animationDelay: `${index * 100}ms`,
-                    }}
-                  >
-                    {item}
-                    <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-purple-400 transition-all duration-300 group-hover:w-full"></span>
-                  </a>
-                )
-              )}
-            </div>
 
-            {/* Mobile Menu Button */}
+
+      {/* Mobile Header */}
+      <nav className="fixed top-0 w-full z-50 md:hidden bg-white shadow-md">
+        <div className="px-4 py-4">
+          <div className="flex justify-between items-center">
+            <div className="text-xl font-bold">
+              <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">Ganga.dev</span>
+            </div>
             <button
-              className="md:hidden text-white p-2"
+              className="text-gray-700 p-2"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
-              <div
-                className={`w-6 h-0.5 bg-white mb-1 transition-all duration-300 ${
-                  isMenuOpen ? "rotate-45 translate-y-1.5" : ""
-                }`}
-              ></div>
-              <div
-                className={`w-6 h-0.5 bg-white mb-1 transition-all duration-300 ${
-                  isMenuOpen ? "opacity-0" : ""
-                }`}
-              ></div>
-              <div
-                className={`w-6 h-0.5 bg-white transition-all duration-300 ${
-                  isMenuOpen ? "-rotate-45 -translate-y-1.5" : ""
-                }`}
-              ></div>
+              <div className={`w-6 h-0.5 bg-gray-700 mb-1.5 transition-all ${isMenuOpen ? "rotate-45 translate-y-2" : ""}`}></div>
+              <div className={`w-6 h-0.5 bg-gray-700 mb-1.5 transition-all ${isMenuOpen ? "opacity-0" : ""}`}></div>
+              <div className={`w-6 h-0.5 bg-gray-700 transition-all ${isMenuOpen ? "-rotate-45 -translate-y-2" : ""}`}></div>
             </button>
           </div>
         </div>
-
-        {/* Mobile Menu */}
-        <div
-          className={`md:hidden bg-black/90 backdrop-blur-lg transition-all duration-300 ${
-            isMenuOpen ? "max-h-64 opacity-100" : "max-h-0 opacity-0"
-          } overflow-hidden`}
-        >
-          <div className="px-4 py-2 space-y-2">
-            {["Home", "About", "Projects", "Skills", "Contact"].map((item) => (
+        {isMenuOpen && (
+          <div className="bg-white border-t border-gray-200 px-4 py-4">
+            {["Home", "About", "Projects", "Skills"].map((item) => (
               <a
                 key={item}
                 href={`#${item.toLowerCase()}`}
-                className="block text-white hover:text-purple-400 transition-colors duration-300 py-2"
+                className="block py-3 text-gray-700 hover:text-blue-600"
                 onClick={() => setIsMenuOpen(false)}
               >
                 {item}
               </a>
             ))}
           </div>
-        </div>
+        )}
       </nav>
 
-      {/* Hero Section */}
-      <main className="relative overflow-hidden">
-        {/* Animated Background Elements */}
-        <div className="absolute inset-0">
-          <div className="absolute top-20 left-10 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl animate-pulse"></div>
-          <div
-            className="absolute bottom-20 right-10 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse"
-            style={{ animationDelay: "1s" }}
-          ></div>
-          <div
-            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-pink-500/10 rounded-full blur-3xl animate-pulse"
-            style={{ animationDelay: "2s" }}
-          ></div>
-        </div>
+      {/* Main Content */}
+      <main className="md:ml-20 relative z-10">
+        {/* Hero Section */}
+        <section id="home" className="min-h-screen flex items-center px-6 md:px-12 lg:px-20 pt-20 md:pt-0">
+          <div className="max-w-6xl">
+            <div className="mb-6 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-100 border border-blue-300">
+              <div className="w-2 h-2 bg-blue-600 rounded-full animate-pulse"></div>
+              <span className="text-blue-800 text-sm font-medium">Available for opportunities</span>
+            </div>
 
-        <section
-          id="home"
-          className="min-h-screen flex items-center justify-center px-4 pt-16"
-        >
-          <div className="text-center z-10 max-w-4xl mx-auto">
-            {/* Animated Profile Image */}
-            <div className="mb-8 relative">
-              <div className="w-48 h-48 mx-auto rounded-full bg-gradient-to-r from-purple-400 to-pink-400 p-1 animate-spin-slow">
-                <div className="w-full h-full rounded-full bg-slate-800 flex items-center justify-center">
-                  <span className="text-6xl">👨‍💻</span>
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-gray-900 mb-6">
+              Ganga K
+            </h1>
+
+            <div className="text-2xl md:text-4xl lg:text-5xl font-bold mb-8">
+              <span className="bg-gradient-to-r from-blue-600 via-cyan-600 to-teal-600 bg-clip-text text-transparent">
+                Aspiring Web Developer
+              </span>
+            </div>
+
+            <p className="text-lg md:text-xl text-gray-700 max-w-2xl mb-12 leading-relaxed">
+              Computer Science student crafting modern web experiences. 
+              Passionate about clean code, beautiful design, and continuous learning.
+            </p>
+
+            <div className="flex flex-wrap gap-4 mb-16">
+              <a
+                href="#projects"
+                className="group px-8 py-4 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all transform hover:scale-105"
+              >
+                <span className="flex items-center gap-2">
+                  View My Work
+                  <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </span>
+              </a>
+              <a
+                href="mailto:ganga.dev@example.com"
+                className="px-8 py-4 bg-white text-blue-600 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all border-2 border-blue-600"
+              >
+                Say Hello 👋
+              </a>
+            </div>
+
+            <div className="flex gap-6">
+              <a href="#" className="w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow-md hover:shadow-lg transition-all hover:scale-110">
+                <span className="text-2xl">🐙</span>
+              </a>
+              <a href="#" className="w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow-md hover:shadow-lg transition-all hover:scale-110">
+                <span className="text-2xl">💼</span>
+              </a>
+              <a href="#" className="w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow-md hover:shadow-lg transition-all hover:scale-110">
+                <span className="text-2xl">📧</span>
+              </a>
+            </div>
+          </div>
+        </section>
+
+        {/* About Section */}
+        <section id="about" className="min-h-screen flex items-center px-6 md:px-12 lg:px-20 py-20">
+          <div className="max-w-6xl w-full">
+            <div className="grid md:grid-cols-2 gap-16 items-start">
+              <div>
+                <div className="inline-block px-4 py-2 rounded-full bg-cyan-100 text-cyan-800 text-sm font-medium mb-6 border border-cyan-300">
+                  About Me
+                </div>
+                <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+                  Building Digital Experiences
+                </h2>
+                <div className="w-20 h-1 bg-gradient-to-r from-blue-600 to-cyan-600 mb-8 rounded-full"></div>
+                
+                <p className="text-gray-700 text-lg mb-6 leading-relaxed">
+                  I'm a Computer Science student with a passion for creating beautiful, 
+                  functional websites that make a difference. Every line of code is an 
+                  opportunity to learn something new.
+                </p>
+                
+                <p className="text-gray-700 text-lg mb-8 leading-relaxed">
+                  Currently exploring the full spectrum of web development, from crafting 
+                  pixel-perfect frontends to building robust backend systems.
+                </p>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="bg-white border-2 border-blue-200 rounded-xl p-4 shadow-md hover:shadow-lg transition-all">
+                    <div className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent mb-1">10+</div>
+                    <div className="text-gray-600 text-sm">Projects</div>
+                  </div>
+                  <div className="bg-white border-2 border-cyan-200 rounded-xl p-4 shadow-md hover:shadow-lg transition-all">
+                    <div className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent mb-1">CS</div>
+                    <div className="text-gray-600 text-sm">Student</div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <div className="bg-white border-2 border-blue-200 rounded-2xl p-6 shadow-md hover:shadow-lg transition-all">
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 bg-gradient-to-br from-blue-100 to-cyan-100 rounded-xl flex items-center justify-center text-2xl flex-shrink-0">
+                      🎓
+                    </div>
+                    <div>
+                      <h3 className="text-gray-900 font-semibold mb-2">Education</h3>
+                      <p className="text-gray-700 text-sm leading-relaxed">
+                        Pursuing Computer Science degree with focus on software development 
+                        and problem-solving
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-white border-2 border-cyan-200 rounded-2xl p-6 shadow-md hover:shadow-lg transition-all">
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 bg-gradient-to-br from-cyan-100 to-teal-100 rounded-xl flex items-center justify-center text-2xl flex-shrink-0">
+                      💡
+                    </div>
+                    <div>
+                      <h3 className="text-gray-900 font-semibold mb-2">Problem Solver</h3>
+                      <p className="text-gray-700 text-sm leading-relaxed">
+                        Love tackling complex challenges and finding elegant solutions 
+                        through code
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-white border-2 border-teal-200 rounded-2xl p-6 shadow-md hover:shadow-lg transition-all">
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 bg-gradient-to-br from-teal-100 to-emerald-100 rounded-xl flex items-center justify-center text-2xl flex-shrink-0">
+                      🚀
+                    </div>
+                    <div>
+                      <h3 className="text-gray-900 font-semibold mb-2">Always Learning</h3>
+                      <p className="text-gray-700 text-sm leading-relaxed">
+                        Constantly exploring new technologies and best practices in web development
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
+          </div>
+        </section>
 
-            {/* Animated Text */}
-            <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 animate-fade-in-up">
-              Hi, I&apos;m{" "}
-              <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent animate-pulse">
-                Prakash
-              </span>
-            </h1>
-
-            <p
-              className="text-xl md:text-2xl text-gray-300 mb-8 animate-fade-in-up"
-              style={{ animationDelay: "0.2s" }}
-            >
-              Full Stack Developer &amp; UI/UX Designer
-            </p>
-
-            <p
-              className="text-lg text-gray-400 mb-12 max-w-2xl mx-auto animate-fade-in-up"
-              style={{ animationDelay: "0.4s" }}
-            >
-              I create beautiful, functional, and user-centered digital
-              experiences. Let&apos;s build something amazing together.
-            </p>
-
-            {/* Animated CTA Buttons */}
-            <div
-              className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up"
-              style={{ animationDelay: "0.6s" }}
-            >
-              <button className="group px-8 py-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-full font-semibold transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/25">
-                <span className="flex items-center justify-center gap-2">
-                  View My Work
-                  <svg
-                    className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M17 8l4 4m0 0l-4 4m4-4H3"
-                    />
-                  </svg>
-                </span>
-              </button>
-
-              <button className="group px-8 py-4 border-2 border-purple-400 text-purple-400 rounded-full font-semibold transition-all duration-300 hover:bg-purple-400 hover:text-white hover:scale-105">
-                <span className="flex items-center justify-center gap-2">
-                  Download CV
-                  <svg
-                    className="w-5 h-5 group-hover:translate-y-1 transition-transform duration-300"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                    />
-                  </svg>
-                </span>
-              </button>
+        {/* Projects Section */}
+        <section id="projects" className="min-h-screen flex items-center px-6 md:px-12 lg:px-20 py-20">
+          <div className="max-w-6xl w-full">
+            <div className="inline-block px-4 py-2 rounded-full bg-blue-100 text-blue-800 text-sm font-medium mb-6 border border-blue-300">
+              My Work
             </div>
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Featured Projects</h2>
+            <div className="w-20 h-1 bg-gradient-to-r from-blue-600 to-cyan-600 mb-12 rounded-full"></div>
 
-            {/* Floating Social Icons */}
-            <div
-              className="flex justify-center gap-6 mt-16 animate-fade-in-up"
-              style={{ animationDelay: "0.8s" }}
-            >
-              {[
-                { name: "GitHub", icon: "🐙" },
-                { name: "LinkedIn", icon: "💼" },
-                { name: "Twitter", icon: "🐦" },
-                { name: "Email", icon: "📧" },
-              ].map((social, index) => (
-                <a
-                  key={social.name}
-                  href="#"
-                  className="w-12 h-12 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center text-2xl transition-all duration-300 hover:bg-purple-500 hover:scale-110 hover:-translate-y-2"
-                  style={{ animationDelay: `${1 + index * 0.1}s` }}
+            <div className="grid md:grid-cols-2 gap-6">
+              {projects.map((project, index) => (
+                <div
+                  key={index}
+                  className="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all hover:scale-105"
                 >
-                  {social.icon}
-                </a>
+                  <div className={`h-48 bg-gradient-to-br ${project.gradient} flex items-center justify-center text-6xl relative overflow-hidden`}>
+                    <span className="relative z-10 group-hover:scale-110 transition-transform">{project.icon}</span>
+                  </div>
+                  
+                  <div className="p-6">
+                    <h3 className="text-xl font-bold text-gray-900 mb-2">{project.title}</h3>
+                    <p className="text-gray-700 text-sm mb-4">{project.description}</p>
+                    
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {project.tags.map((tag, i) => (
+                        <span
+                          key={i}
+                          className="px-3 py-1 bg-blue-100 text-blue-800 rounded-lg text-xs border border-blue-200"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+
+                    <a
+                      href="#"
+                      className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 text-sm font-medium group"
+                    >
+                      View Project
+                      <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                      </svg>
+                    </a>
+                  </div>
+                </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* Scroll Indicator */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-          <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center">
-            <div className="w-1 h-3 bg-white/60 rounded-full mt-2 animate-pulse"></div>
+        {/* Skills Section */}
+        <section id="skills" className="min-h-screen flex items-center px-6 md:px-12 lg:px-20 py-20">
+          <div className="max-w-6xl w-full">
+            <div className="inline-block px-4 py-2 rounded-full bg-teal-100 text-teal-800 text-sm font-medium mb-6 border border-teal-300">
+              Expertise
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Skills & Technologies</h2>
+            <div className="w-20 h-1 bg-gradient-to-r from-blue-600 to-cyan-600 mb-12 rounded-full"></div>
+
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {skills.map((skillCategory, index) => (
+                <div
+                  key={index}
+                  className="bg-white border-2 border-gray-200 rounded-2xl p-6 shadow-md hover:shadow-lg transition-all hover:scale-105"
+                >
+                  <div className="text-3xl mb-4">{skillCategory.icon}</div>
+                  <h3 className="text-gray-900 font-semibold mb-4">{skillCategory.category}</h3>
+                  <div className="space-y-2">
+                    {skillCategory.items.map((skill, i) => (
+                      <div
+                        key={i}
+                        className="text-gray-700 text-sm"
+                      >
+                        • {skill}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
+        </section>
+
+        {/* Footer */}
+        <footer className="border-t-2 border-gray-200 px-6 md:px-12 lg:px-20 py-12 bg-white">
+          <div className="max-w-6xl mx-auto">
+            <div className="flex flex-col md:flex-row justify-between items-center gap-8 mb-8">
+              <div>
+                <h3 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent mb-2">
+                  Let's Connect
+                </h3>
+                <p className="text-gray-700 text-sm">Feel free to reach out for collaborations or just a friendly hello!</p>
+              </div>
+              <div className="flex gap-4">
+                <a href="#" className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center border-2 border-blue-200 hover:bg-blue-100 transition-all hover:scale-110">
+                  <span className="text-2xl">🐙</span>
+                </a>
+                <a href="#" className="w-12 h-12 bg-cyan-50 rounded-xl flex items-center justify-center border-2 border-cyan-200 hover:bg-cyan-100 transition-all hover:scale-110">
+                  <span className="text-2xl">💼</span>
+                </a>
+                <a href="mailto:ganga.dev@example.com" className="w-12 h-12 bg-teal-50 rounded-xl flex items-center justify-center border-2 border-teal-200 hover:bg-teal-100 transition-all hover:scale-110">
+                  <span className="text-2xl">📧</span>
+                </a>
+              </div>
+            </div>
+            <div className="text-center text-gray-600 text-sm border-t border-gray-200 pt-8">
+              © 2025 Ganga K. Crafted with 💙 and code
+            </div>
+          </div>
+        </footer>
       </main>
-
-      {/* Custom CSS for animations */}
-      <style jsx>{`
-        @keyframes fade-in-up {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        @keyframes spin-slow {
-          from {
-            transform: rotate(0deg);
-          }
-          to {
-            transform: rotate(360deg);
-          }
-        }
-
-        .animate-fade-in-up {
-          animation: fade-in-up 0.8s ease-out forwards;
-          opacity: 0;
-        }
-
-        .animate-spin-slow {
-          animation: spin-slow 8s linear infinite;
-        }
-      `}</style>
     </div>
   );
 }
