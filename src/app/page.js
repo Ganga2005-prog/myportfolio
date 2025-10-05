@@ -198,7 +198,7 @@ export default function Home() {
                 <div className="w-20 h-1 bg-gradient-to-r from-blue-600 to-cyan-600 mb-8 rounded-full"></div>
                 
                 <p className="text-gray-700 text-lg mb-6 leading-relaxed">
-                  I'm a Computer Science student with a passion for creating beautiful, 
+                  I&apos;m a Computer Science student with a passion for creating beautiful, 
                   functional websites that make a difference. Every line of code is an 
                   opportunity to learn something new.
                 </p>
@@ -358,7 +358,7 @@ export default function Home() {
             <div className="flex flex-col md:flex-row justify-between items-center gap-8 mb-8">
               <div>
                 <h3 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent mb-2">
-                  Let's Connect
+                  Let&apos;s Connect
                 </h3>
                 <p className="text-gray-700 text-sm">Feel free to reach out for collaborations or just a friendly hello!</p>
               </div>
